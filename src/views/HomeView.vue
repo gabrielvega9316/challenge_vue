@@ -1,48 +1,63 @@
 <script>
   import { RouterLink, RouterView } from 'vue-router'
   import { getUsers } from '../api/users'
+
   export default {
   name: 'HomeView',
   data() {
     return {
       searchQuery: '',
       users: [],
+      currentPage: 0,
+      pageSize: 9,
+      totalPages: 0,
     };
   },
   methods: {
-    async fetchUsers() {
+    async searchUsers() {
       try {
-        const response = await getUsers(); // Realiza la petición para obtener los detalles de los usuarios
-        this.users = response.data.data; // Actualiza la lista de usuarios con los datos obtenidos
-        console.log('response-users', this.users)
+        const response = await getUsers(this.pageSize, this.currentPage);
+
+        this.users = response.data.data;
+        this.totalPages = Math.ceil(response.data.total / this.pageSize);
       } catch (error) {
         console.error(error);
+      }
+    },
+    goToPage(page) {
+      if (page >= 1 && page <= this.totalPages) {
+        this.currentPage = page;
+        this.searchUsers();
       }
     },
   },
   computed: {
     filteredUsers() {
       if (this.searchQuery) {
-        return this.users.filter(user =>
-          user.lastName.toLowerCase().includes(this.searchQuery.toLowerCase())
-        );
+        const query = this.searchQuery.toLowerCase();
+        return this.users.filter(user => {
+          const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
+          const firstName = user.firstName.toLowerCase();
+          const lastName = user.lastName.toLowerCase();
+          return fullName.includes(query) || firstName.includes(query) || lastName.includes(query);
+        });
       } else {
         return this.users;
       }
     }
   },
   mounted() {
-    this.fetchUsers(); // Llama a la función para obtener los detalles de los usuarios al cargar el componente
-  },
+    this.searchUsers();
+  }
   };
 </script>
     
 <template>
+  <div class="search-bar">
+    <input type="text" v-model="searchQuery" placeholder="Buscar usuarios" />
+    <!-- Aquí puedes agregar la lógica de búsqueda -->
+  </div>
   <div class="home-view">
-    <div class="search-bar">
-      <input type="text" v-model="searchQuery" placeholder="Buscar usuarios" />
-      <!-- Aquí puedes agregar la lógica de búsqueda -->
-    </div>
     <div class="user-cards">
       <!-- <UserDetailComponent v-if="showDetails" :user="selectedUser" /> -->
       <div class="user-card" v-for="user in filteredUsers" :key="user.id">
@@ -61,6 +76,11 @@
       </div>
     </div>
   </div>
+  <div class="pagination">
+    <button v-for="page in totalPages" :key="page" @click="goToPage(page)">
+      {{ page }}
+    </button>
+  </div>
 </template>
 
 
@@ -72,9 +92,25 @@
   align-items: flex-start;
 }
 
+/* Search bar styles */
 .search-bar {
   margin-bottom: 20px;
 }
+
+.search-bar input[type="text"] {
+  padding: 15px;
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  outline: none;
+  transition: box-shadow 0.3s;
+}
+
+.search-bar input[type="text"]:focus {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* user cards styles */
 
 .user-cards {
   display: flex;
@@ -82,14 +118,15 @@
   grid-gap: 20px;
   flex-direction: row;
   flex-wrap: wrap;
-  background-color: white;
+  background-color: rgb(4, 45, 58);
+  border-radius: 15px;
 }
 
 @media (max-width: 768px) {
   .user-cards {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(10cm, 1fr));
-    background-color: white;
+    background-color: rgb(4, 45, 58);
   }
 }
 
@@ -150,5 +187,44 @@
   border-bottom: 15px solid transparent;
   border-left: 15px solid #039960;
   margin-left: 5px; 
+}
+
+/* pagination styles */
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.pagination button {
+  padding: 8px 12px;
+  margin: 0 4px;
+  border: none;
+  border-radius: 4px;
+  background-color: #f2f2f2;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.pagination button:hover {
+  background-color: #e0e0e0;
+}
+
+.pagination button.active {
+  background-color: #333;
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .pagination {
+    flex-wrap: wrap;
+  }
+
+  .pagination button {
+    margin: 4px;
+    font-size: 12px;
+  }
 }
 </style>

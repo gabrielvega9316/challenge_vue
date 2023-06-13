@@ -1,14 +1,18 @@
 import axios from 'axios';
 
-export const getUsers = () => {
-  const config = {
-    headers: {
-      'app-id': '648710081fb3adb3753fe82c'
-    }
+export const getUsers = (limit, page) => {
+    const config = {
+      headers: {
+        'app-id': '648710081fb3adb3753fe82c'
+      },
+      params: {
+        limit,
+        page
+      }
+    };
+  
+    return axios.get('https://dummyapi.io/data/v1/user', config);
   };
-
-  return axios.get('https://dummyapi.io/data/v1/user?limit=10', config);
-};
 
 export const getUserDetails = (userId) => {
   const config = {

@@ -13,7 +13,6 @@ const router = createRouter({
     {
       path: '/profile/:id',
       name: 'profile',
-      // component: DetailView,
       props: true,
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/DetailView.vue')

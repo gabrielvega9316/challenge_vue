@@ -55,11 +55,9 @@
 <template>
   <div class="search-bar">
     <input type="text" v-model="searchQuery" placeholder="Buscar usuarios" />
-    <!-- Aquí puedes agregar la lógica de búsqueda -->
   </div>
   <div class="home-view">
     <div class="user-cards">
-      <!-- <UserDetailComponent v-if="showDetails" :user="selectedUser" /> -->
       <div class="user-card" v-for="user in filteredUsers" :key="user.id">
         <div class="user-avatar">
           <img :src="user.picture" alt="User Avatar" />
@@ -84,7 +82,7 @@
 </template>
 
 
-<style>
+<style scoped>
 .home-view {
   display: flex;
   flex-wrap: wrap;

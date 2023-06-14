@@ -21,44 +21,46 @@
   </div>
 </template>
   
-  <script>
-  import { getUserDetails } from '../api/users';
-  
+<script>
+  import { mapActions, mapGetters } from 'vuex';
   export default {
     name: 'DetailView',
-    data() {
-      return {
-        userDetails: null
-      };
+    computed: {
+      ...mapGetters(['getUserDetailsById']),
+      userId() {
+        return this.$route.params.id;
+      },
+      userDetails() {
+        const userDetails = this.getUserDetailsById(this.userId);
+        return userDetails ? userDetails : null;
+      }
     },
     created() {
       this.fetchUserDetails();
     },
     methods: {
-      fetchUserDetails() {
-        const userId = this.$route.params.id;
-        // console.log('userId', userId);
-        
-        // Llama a la función getUserDetails y pasa el ID de usuario
-        getUserDetails(userId)
-          .then(response => {
-            // Aquí puedes manejar la respuesta de la petición
-            this.userDetails = response.data;
-            // console.log('UserDetails', this.userDetails);
-          })
-          .catch(error => {
-            // Aquí puedes manejar el error de la petición
-            console.error(error);
-          });
+      ...mapActions(['fetchUserDetails']),
+      async fetchUserDetails() {
+        const userDetails = this.getUserDetailsById(this.userId);
+
+        if (!userDetails) {
+          try {
+            await this.$store.dispatch('fetchUserDetails', this.userId);
+            this.userDetails = this.getUserDetailsById(this.userId);
+          } catch (error) {
+            console.error('error-fetchUserDetails', error);
+          }
+        }
       },
       goToHomePage() {
-      this.$router.push('/');
+        this.$router.push('/');
+      }
     }
-    }
-  }
-  </script >
-  
-  <style scoped>
+  };
+</script>
+
+
+<style scoped>
 .user-card {
   position: relative;
   display: flex;
@@ -96,12 +98,12 @@
   background-color: rgb(4, 45, 58);
   color: #fff;
   font-size: 16px;
-  cursor: pointer; /* Cambia el cursor al pasar el ratón sobre el botón */
-  transition: background-color 0.3s; /* Añade una transición suave */
+  cursor: pointer; 
+  transition: background-color 0.3s; 
 }
 
 .back-button:hover {
-  background-color: rgb(19, 212, 148); /* Cambia el color de fondo al pasar el ratón sobre el botón */
+  background-color: rgb(19, 212, 148); 
 }
 .user-details-card {
     width: 100%;
@@ -110,5 +112,5 @@
     padding: 10px;
     border-radius: 5px;
   }
-  </style>
+</style>
   

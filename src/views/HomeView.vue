@@ -1,57 +1,3 @@
-<script>
-  import { RouterLink, RouterView } from 'vue-router'
-  import { getUsers } from '../api/users'
-
-  export default {
-  name: 'HomeView',
-  data() {
-    return {
-      searchQuery: '',
-      users: [],
-      currentPage: 0,
-      pageSize: 9,
-      totalPages: 0,
-    };
-  },
-  methods: {
-    async searchUsers() {
-      try {
-        const response = await getUsers(this.pageSize, this.currentPage);
-
-        this.users = response.data.data;
-        this.totalPages = Math.ceil(response.data.total / this.pageSize);
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    goToPage(page) {
-      if (page >= 1 && page <= this.totalPages) {
-        this.currentPage = page;
-        this.searchUsers();
-      }
-    },
-  },
-  computed: {
-    filteredUsers() {
-      if (this.searchQuery) {
-        const query = this.searchQuery.toLowerCase();
-        return this.users.filter(user => {
-          const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
-          const firstName = user.firstName.toLowerCase();
-          const lastName = user.lastName.toLowerCase();
-          return fullName.includes(query) || firstName.includes(query) || lastName.includes(query);
-        });
-      } else {
-        return this.users;
-      }
-    }
-  },
-  mounted() {
-    this.searchUsers();
-  }
-  };
-</script>
-    
 <template>
   <div class="search-bar">
     <input type="text" v-model="searchQuery" placeholder="Buscar usuarios" />
@@ -80,6 +26,60 @@
     </button>
   </div>
 </template>
+
+<script>
+  import { RouterLink } from 'vue-router'
+  import { getUsers } from '../api/users'
+
+  export default {
+  name: 'HomeView',
+  data() {
+    return {
+      searchQuery: '',
+      users: [],
+      currentPage: 0,
+      pageSize: 9,
+      totalPages: 0,
+    };
+  },
+  methods: {
+    async searchUsers() {
+      try {
+        const response = await getUsers(this.pageSize, this.currentPage);
+
+        this.users = response.data.data;
+        this.totalPages = Math.ceil(response.data.total / this.pageSize);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    goToPage(page) {
+      if (page >= 1 && page <= this.totalPages) {
+        this.currentPage = page - 1;
+        this.searchUsers();
+      }
+    },
+  },
+  computed: {
+    filteredUsers() {
+      if (this.searchQuery) {
+        const query = this.searchQuery.toLowerCase();
+        return this.users.filter(user => {
+          const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
+          const firstName = user.firstName.toLowerCase();
+          const lastName = user.lastName.toLowerCase();
+          return fullName.includes(query) || firstName.includes(query) || lastName.includes(query);
+        });
+      } else {
+        return this.users;
+      }
+    }
+  },
+  mounted() {
+    this.searchUsers();
+  }
+  };
+</script>
 
 
 <style scoped>

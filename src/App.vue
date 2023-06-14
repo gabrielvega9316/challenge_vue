@@ -20,5 +20,6 @@ export default {
 <style>
 h1 {
   color: #ffffff;
+  margin-bottom: revert;
 }
 </style>

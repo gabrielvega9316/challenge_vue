@@ -1,11 +1,12 @@
 <template>
   <div>
-    <h1>My Search User</h1>
-    <HomeView />
+    <h1>My User Search</h1>
   </div>
+  <RouterView />
 </template>
 
 <script>
+import { RouterView } from 'vue-router'
 import HomeView from './views/HomeView.vue';
 
 export default {
@@ -19,5 +20,6 @@ export default {
 <style>
 h1 {
   color: #ffffff;
+  margin-bottom: revert;
 }
 </style>

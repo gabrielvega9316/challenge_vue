@@ -17,7 +17,7 @@ export const getUsers = (limit, page) => {
 export const getUserDetails = (userId) => {
   const config = {
     headers: {
-      'app-id': 'your-app-id' // Reemplaza 'your-app-id' con tu ID de aplicación real
+      'app-id': '648710081fb3adb3753fe82c' 
     }
   };
 

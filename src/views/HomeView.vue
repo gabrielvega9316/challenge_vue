@@ -1,5 +1,34 @@
+<template>
+  <div class="search-bar">
+    <input type="text" v-model="searchQuery" placeholder="Buscar usuarios" />
+  </div>
+  <div class="home-view">
+    <div class="user-cards">
+      <div class="user-card" v-for="user in filteredUsers" :key="user.id">
+        <div class="user-avatar">
+          <img :src="user.picture" alt="User Avatar" />
+        </div>
+        <div class="user-details">
+          <h3>{{ user.firstName }} {{ user.lastName }}</h3>
+        </div>
+        <div class="user-button">
+          <button class="details-button">
+            <RouterLink :to="{ name: 'profile', params: { id: user.id } }">Details</RouterLink>            
+              <!-- <span class="triangle"></span> -->
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pagination">
+    <button v-for="page in totalPages" :key="page" @click="goToPage(page)">
+      {{ page }}
+    </button>
+  </div>
+</template>
+
 <script>
-  import { RouterLink, RouterView } from 'vue-router'
+  import { RouterLink } from 'vue-router'
   import { getUsers } from '../api/users'
 
   export default {
@@ -26,7 +55,7 @@
     },
     goToPage(page) {
       if (page >= 1 && page <= this.totalPages) {
-        this.currentPage = page;
+        this.currentPage = page - 1;
         this.searchUsers();
       }
     },
@@ -51,40 +80,9 @@
   }
   };
 </script>
-    
-<template>
-  <div class="search-bar">
-    <input type="text" v-model="searchQuery" placeholder="Buscar usuarios" />
-    <!-- Aquí puedes agregar la lógica de búsqueda -->
-  </div>
-  <div class="home-view">
-    <div class="user-cards">
-      <!-- <UserDetailComponent v-if="showDetails" :user="selectedUser" /> -->
-      <div class="user-card" v-for="user in filteredUsers" :key="user.id">
-        <div class="user-avatar">
-          <img :src="user.picture" alt="User Avatar" />
-        </div>
-        <div class="user-details">
-          <h3>{{ user.firstName }} {{ user.lastName }}</h3>
-        </div>
-        <div class="user-button">
-          <button class="details-button">
-            <RouterLink :to="{ name: 'profile', params: { id: user.id } }">Details</RouterLink>            
-              <!-- <span class="triangle"></span> -->
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="pagination">
-    <button v-for="page in totalPages" :key="page" @click="goToPage(page)">
-      {{ page }}
-    </button>
-  </div>
-</template>
 
 
-<style>
+<style scoped>
 .home-view {
   display: flex;
   flex-wrap: wrap;

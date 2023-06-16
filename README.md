@@ -1,3 +1,5 @@
+<p align="center"><a href="https://vuejs.org/guide/introduction.html" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Vue.js_Logo_2.svg" width="250" alt="Vue Logo"></a></p>
+
 # MailUp Vue
 
 This template should help get you started developing with Vue 3 in Vite.
@@ -40,14 +42,14 @@ Este proyecto consiste en una aplicación con dos vistas principales: HomeView y
 
 ### Peticiones API
 
-Las peticiones a la API se realizan utilizando Axios. Estas peticiones se encuentran en el archivo src/api/users.js. Aquí se definen los métodos y rutas necesarios para obtener los datos de los usuarios desde el servidor.
+Las peticiones a la API se realizan utilizando Axios. Estas peticiones se encuentran en el archivo ```src/api/users.js``` Aquí se definen los métodos y rutas necesarios para obtener los datos de los usuarios desde el servidor.
 
 ### Vue Router
 
-La configuración de Vue Router se encuentra en el archivo src/router/index.js. Aquí se definen las rutas y las correspondientes vistas asociadas a cada una. Esto permite la navegación entre HomeView y DetailsView de manera adecuada.
+La configuración de Vue Router se encuentra en el archivo ```src/router/index.js```. Aquí se definen las rutas y las correspondientes vistas asociadas a cada una. Esto permite la navegación entre HomeView y DetailsView de manera adecuada.
 
 ### Almacenamiento de datos con Vuex
 
-La información detallada de los usuarios se almacena en el store de Vuex, específicamente en el archivo src/store/index.js. Aquí se gestionan los estados y las mutaciones relacionadas con los datos de los usuarios.
+La información detallada de los usuarios se almacena en el store de Vuex, específicamente en el archivo ```src/store/index.js```. Aquí se gestionan los estados y las mutaciones relacionadas con los datos de los usuarios.
 
 

@@ -1,7 +1,5 @@
 <template>
-  <div class="search-bar">
-    <input type="text" v-model="searchQuery" placeholder="Buscar usuarios" />
-  </div>
+  <SearchBar @search="handleSearch"></SearchBar>
   <div class="home-view">
     <div class="user-cards">
       <div class="user-card" v-for="user in filteredUsers" :key="user.id">
@@ -14,22 +12,23 @@
         <div class="user-button">
           <button class="details-button">
             <RouterLink :to="{ name: 'profile', params: { id: user.id } }">Details</RouterLink>            
-              <!-- <span class="triangle"></span> -->
           </button>
         </div>
       </div>
     </div>
   </div>
-  <div class="pagination">
-    <button v-for="page in totalPages" :key="page" @click="goToPage(page)">
-      {{ page }}
-    </button>
-  </div>
+  <Pagination
+      :current-page="currentPage"
+      :total-pages="totalPages"
+      @page-change="handlePageChange"
+  ></Pagination>
 </template>
 
 <script>
   import { RouterLink } from 'vue-router'
   import { getUsers } from '../api/users'
+  import SearchBar from '../components/SearchBar.vue'
+  import Pagination from '../components/Pagination.vue'
 
   export default {
   name: 'HomeView',
@@ -42,7 +41,14 @@
       totalPages: 0,
     };
   },
+  components: {
+    SearchBar,
+    Pagination
+  },
   methods: {
+    handleSearch(newQuery) {
+      this.searchQuery = newQuery;
+    },
     async searchUsers() {
       try {
         const response = await getUsers(this.pageSize, this.currentPage);
@@ -53,12 +59,10 @@
         console.error(error);
       }
     },
-    goToPage(page) {
-      if (page >= 1 && page <= this.totalPages) {
-        this.currentPage = page - 1;
-        this.searchUsers();
-      }
-    },
+    handlePageChange(newPage) {
+      this.currentPage = newPage - 1;
+      this.searchUsers();
+    }
   },
   computed: {
     filteredUsers() {
@@ -89,25 +93,6 @@
   justify-content: center;
   align-items: flex-start;
 }
-
-/* Search bar styles */
-.search-bar {
-  margin-bottom: 20px;
-}
-
-.search-bar input[type="text"] {
-  padding: 15px;
-  border: none;
-  border-radius: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  outline: none;
-  transition: box-shadow 0.3s;
-}
-
-.search-bar input[type="text"]:focus {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
 /* user cards styles */
 
 .user-cards {
@@ -125,6 +110,15 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(10cm, 1fr));
     background-color: rgb(4, 45, 58);
+  }
+}
+
+@media (max-width: 420px) {
+  .user-card {
+    flex: 0 0 calc(50% - 20px);
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
   }
 }
 
@@ -176,53 +170,5 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-}
-
-.triangle {
-  width: 0;
-  height: 0;
-  border-top: 15px solid transparent;
-  border-bottom: 15px solid transparent;
-  border-left: 15px solid #039960;
-  margin-left: 5px; 
-}
-
-/* pagination styles */
-
-.pagination {
-  display: flex;
-  justify-content: center;
-  margin-top: 30px;
-}
-
-.pagination button {
-  padding: 8px 12px;
-  margin: 0 4px;
-  border: none;
-  border-radius: 4px;
-  background-color: #f2f2f2;
-  color: #333;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.pagination button:hover {
-  background-color: #e0e0e0;
-}
-
-.pagination button.active {
-  background-color: #333;
-  color: #fff;
-}
-
-@media (max-width: 768px) {
-  .pagination {
-    flex-wrap: wrap;
-  }
-
-  .pagination button {
-    margin: 4px;
-    font-size: 12px;
-  }
 }
 </style>

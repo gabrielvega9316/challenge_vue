@@ -26,34 +26,34 @@
   export default {
     name: 'DetailView',
     computed: {
-      ...mapGetters(['getUserDetailsById']),
+      ...mapGetters(['getUserDetailsById']), 
       userId() {
-        return this.$route.params.id;
+        return this.$route.params.id; 
       },
       userDetails() {
-        const userDetails = this.getUserDetailsById(this.userId);
-        return userDetails ? userDetails : null;
+        const userDetails = this.getUserDetailsById(this.userId); // Obtiene los detalles del usuario 
+        return userDetails ? userDetails : null; 
       }
     },
     created() {
-      this.fetchUserDetails();
+      this.fetchUserDetails(); // Llama al método fetchUserDetails cuando se crea el componente
     },
     methods: {
-      ...mapActions(['fetchUserDetails']),
+      ...mapActions(['fetchUserDetails']), 
       async fetchUserDetails() {
-        const userDetails = this.getUserDetailsById(this.userId);
+        const userDetails = this.getUserDetailsById(this.userId); // Obtiene los detalles del usuario usando el getter 'getUserDetailsById'
 
         if (!userDetails) {
           try {
-            await this.$store.dispatch('fetchUserDetails', this.userId);
-            this.userDetails = this.getUserDetailsById(this.userId);
+            await this.$store.dispatch('fetchUserDetails', this.userId); // Llama a 'fetchUserDetails' en el 'store' para obtener los detalles del usuario desde la API
+            this.userDetails = this.getUserDetailsById(this.userId); // Actualiza la propiedad 'userDetails' con los nuevos detalles del usuario
           } catch (error) {
             console.error('error-fetchUserDetails', error);
           }
         }
       },
       goToHomePage() {
-        this.$router.push('/');
+        this.$router.push('/'); 
       }
     }
   };

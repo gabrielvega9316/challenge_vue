@@ -25,65 +25,66 @@
 </template>
 
 <script>
-  import { RouterLink } from 'vue-router'
+  import { RouterLink } from 'vue-router' 
   import { getUsers } from '../api/users'
-  import SearchBar from '../components/SearchBar.vue'
-  import Pagination from '../components/Pagination.vue'
+  import SearchBar from '../components/SearchBar.vue' 
+  import Pagination from '../components/Pagination.vue' 
 
   export default {
-  name: 'HomeView',
-  data() {
-    return {
-      searchQuery: '',
-      users: [],
-      currentPage: 0,
-      pageSize: 9,
-      totalPages: 0,
-    };
-  },
-  components: {
-    SearchBar,
-    Pagination
-  },
-  methods: {
-    handleSearch(newQuery) {
-      this.searchQuery = newQuery;
+    name: 'HomeView',
+    data() {
+      return {
+        searchQuery: '', 
+        users: [], 
+        currentPage: 0, // Almacena el número de página actual
+        pageSize: 9, // Define el tamaño de página
+        totalPages: 0, // Almacena el número total de páginas
+      };
     },
-    async searchUsers() {
-      try {
-        const response = await getUsers(this.pageSize, this.currentPage);
+    components: {
+      SearchBar, 
+      Pagination 
+    },
+    methods: {
+      handleSearch(newQuery) {
+        this.searchQuery = newQuery; // Actualiza el valor de searchQuery con la nueva consulta de búsqueda
+      },
+      async searchUsers() {
+        try {
+          const response = await getUsers(this.pageSize, this.currentPage); 
 
-        this.users = response.data.data;
-        this.totalPages = Math.ceil(response.data.total / this.pageSize);
-      } catch (error) {
-        console.error(error);
+          this.users = response.data.data; 
+          this.totalPages = Math.ceil(response.data.total / this.pageSize); // Calcula el número total de páginas dividiendo el número total de usuarios entre el tamaño de página y redondeando hacia arriba
+        } catch (error) {
+          console.error(error); 
+        }
+      },
+      handlePageChange(newPage) {
+        this.currentPage = newPage - 1; // Actualiza la página actual basada en la página seleccionada por el usuario
+        this.searchUsers(); // Realiza una nueva búsqueda de usuarios con la página actualizada
       }
     },
-    handlePageChange(newPage) {
-      this.currentPage = newPage - 1;
-      this.searchUsers();
-    }
-  },
-  computed: {
-    filteredUsers() {
-      if (this.searchQuery) {
-        const query = this.searchQuery.toLowerCase();
-        return this.users.filter(user => {
-          const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
-          const firstName = user.firstName.toLowerCase();
-          const lastName = user.lastName.toLowerCase();
-          return fullName.includes(query) || firstName.includes(query) || lastName.includes(query);
-        });
-      } else {
-        return this.users;
+    computed: {
+      filteredUsers() {
+        if (this.searchQuery) {
+          const query = this.searchQuery.toLowerCase(); // Convierte la consulta de búsqueda en minúsculas
+          return this.users.filter(user => {
+            const fullName = `${user.firstName} ${user.lastName}`.toLowerCase(); // Concatena el nombre y apellido del usuario en una cadena en minúsculas
+            const firstName = user.firstName.toLowerCase(); 
+            const lastName = user.lastName.toLowerCase(); 
+            return fullName.includes(query) || firstName.includes(query) || lastName.includes(query); // Devuelve true si el nombre completo, el nombre o el apellido del usuario incluyen la consulta de búsqueda
+          });
+        } else {
+          return this.users; 
+        }
       }
+    },
+    mounted() {
+      this.searchUsers(); 
     }
-  },
-  mounted() {
-    this.searchUsers();
-  }
   };
 </script>
+
 
 
 <style scoped>

@@ -1,6 +1,6 @@
 <p align="center"><a href="https://vuejs.org/guide/introduction.html" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Vue.js_Logo_2.svg" width="250" alt="Vue Logo"></a></p>
 
-# MailUp Vue
+# Challenge Vue
 
 This template should help get you started developing with Vue 3 in Vite.
 Node version 18
@@ -54,3 +54,29 @@ La configuración de Vue Router se encuentra en el archivo ```src/router/index.j
 La información detallada de los usuarios se almacena en el store de Vuex, específicamente en el archivo ```src/store/index.js```. Aquí se gestionan los estados y las mutaciones relacionadas con los datos de los usuarios.
 
 
+# Consigna
+### Ejercicio 1: Buscador de equipo
+Se libera un nuevo sprint y se necesita agregar una nueva pantalla que permite buscar dentro del listado de
+usuarios y poder agregarlo a un nuevo proyecto del sistema.
+Dicho lo anterior el programador deberá crear dos pantallas como se muestra en la imagen más abajo donde
+se deberá permitir buscar por nombre y mostrar los resultados de los usuarios, una vez que se encuentre el
+usuario este se debe poder hacer click e ingresar al perfil con toda su información disponible. Es importante
+que al cambiar de página el valor del usuario seleccionado se guarde en el store de Vuex y en la página de
+perfil del usuario la información se muestre desde el store de Vuex.
+
+El APP debe ser RWD
+El APP debe tener una navegación SPA en el buscador al perfil de usuario y viceversa.
+El APP debe utilizar el API público https://dummyapi.io/docs/user (registrarse para obtener un APP-ID).
+
+#### Conocimientos a validar
+- HTML.
+- CSS.
+- JAVASCRIPT.
+- VUE.
+- VUEX.
+- SPA.
+- RWD.
+
+#### Recomendaciones a tener en cuenta:
+Tener en cuenta que la aplicación debe cumplir con los principios SPA y RWD, validación en el buscador,
+paginación de resultados.
